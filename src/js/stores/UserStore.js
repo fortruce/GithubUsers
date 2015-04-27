@@ -13,7 +13,6 @@ var UserStore = Reflux.createStore({
   },
 
   onGetUserCompleted(user) {
-    console.log(user);
     this.trigger(user);
   }
 });
