@@ -21,25 +21,16 @@ var App = React.createClass({
 });
 
 var UserInfo = React.createClass({
-  mixins: [Reflux.ListenerMixin],
+  mixins: [Reflux.connect(UserStore)],
   contextTypes: {
     router: React.PropTypes.func
   },
 
-  getInitialState() {
-    return UserStore.getInitialState();
-  },
-
-  onUserInfo(statuses) {
-    this.setState(statuses);
-  },
-
   componentDidMount() {
-    this.listenTo(UserStore, this.onUserInfo);
-
     actions.getUser(this.context.router.getCurrentParams().username);
   },
 
+  // handle react-router url changes
   componentWillReceiveProps() {
     actions.getUser(this.context.router.getCurrentParams().username);
   },
