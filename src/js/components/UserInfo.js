@@ -9,14 +9,10 @@ var UserInfo = React.createClass({
   contextTypes: {
     router: React.PropTypes.func
   },
-
-  componentDidMount() {
-    actions.getUser(this.context.router.getCurrentParams().username);
-  },
-
-  // handle react-router url changes
-  componentWillReceiveProps() {
-    actions.getUser(this.context.router.getCurrentParams().username);
+  statics: {
+    willTransitionTo(t, params) {
+      actions.getUser(params.username);
+    }
   },
 
   render() {
