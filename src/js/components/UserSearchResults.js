@@ -10,6 +10,8 @@ var UserSearchResults = React.createClass({
     router: React.PropTypes.func
   },
   statics: {
+    // Transitions are triggered thru either the search input
+    // or url traversing - trigger action here for both
     willTransitionTo(t, params) {
       actions.searchUsers(params.search);
     }
