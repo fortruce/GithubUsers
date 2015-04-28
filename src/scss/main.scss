@@ -16,6 +16,10 @@ html {
   font-family: sans-serif;
 }
 
+body {
+  background-color: color("grey", "lighten-4");
+}
+
 .title {
   margin: 0 auto;
   height: 100px;

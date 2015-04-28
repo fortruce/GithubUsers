@@ -1,6 +1,8 @@
 var Reflux = require('reflux');
 var superagent = require('superagent');
 
+var githubToken = 'inserttokenhere:';
+
 var actions = Reflux.createActions({
   // github actions
   'getUser': {asyncResult: true},
@@ -9,6 +11,7 @@ var actions = Reflux.createActions({
 
 actions.getUser.listen( function (username) {
   superagent.get('https://api.github.com/users/' + username)
+        .set('Authorization', 'Basic ' + btoa(githubToken))
         .send()
         .end((err, res) => {
           if (err) return actions.getUser.failed(err);
@@ -18,6 +21,7 @@ actions.getUser.listen( function (username) {
 
 actions.searchUsers.listen( function (username) {
   superagent.get('https://api.github.com/search/users')
+            .set('Authorization', 'Basic ' + btoa(githubToken))
             .query({q: username})
             .send()
             .end((err, res) => {

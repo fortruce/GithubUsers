@@ -36,7 +36,6 @@ gulp.task('browserify', function() {
   bundle(watcher);
 
   return watcher.on('update', function() {
-    console.log('browserify: updated');
     bundle(watcher);
   });
 });
