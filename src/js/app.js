@@ -13,7 +13,7 @@ var App = React.createClass({
   render() {
     return (
       <div>
-        <h1>Github</h1>
+        <h1 className='title teal center-align white-text'>Github</h1>
         <RouteHandler />
       </div>
     );
@@ -50,11 +50,14 @@ var UserSearchResults = React.createClass({
   render() {
     console.log('users:', this.state.users);
     var users = this.state.users.map((user) => {
-      return (<li><Link to='user' params={{username: user.login}}>{user.login}</Link></li>);
+      return (
+      <li className='col s4'>
+        <Link to='user' params={{username: user.login}}>{user.login}</Link>
+      </li>);
     });
 
     return (
-      <ul>{users}</ul>
+      <ul className='row'>{users}</ul>
     );
   }
 });
@@ -66,8 +69,10 @@ var Search = React.createClass({
   },
   render() {
     return (
-      <form onSubmit={this.search}>
-        <input  type='text'
+      <form className='row' onSubmit={this.search}>
+        <input  className='col s8 offset-s2 input-field center-align'
+                type='text'
+                placeholder='Search for Users'
                 ref='username' />
         <UserSearchResults />
       </form>

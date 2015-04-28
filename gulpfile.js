@@ -13,6 +13,7 @@ var reload = browserSync.reload;
 var paths = {
   app: './src/js/app.js',
   src: 'src/js/**/*.*',
+  vendorJs: 'src/js/vendor/*.js',
   buildJs: 'build/js/',
   buildCss: 'build/css/',
   build: 'build/',
@@ -54,11 +55,13 @@ function bundle(b) {
           .on('end', reload);
 }
 
-gulp.task('watch', ['browserify', 'html', 'scss'], function () {
+gulp.task('watch', ['browserify', 'html', 'scss', 'vendor-js'], function () {
   gulp.watch(paths.src, ['browserify']);
   gulp.watch(paths.html, ['html'])
       .on('change', reload);
   gulp.watch(paths.scss, ['scss']);
+  gulp.watch(paths.vendorJs, ['vendor-js'])
+      .on('change', reload);
 });
 
 /**
@@ -77,6 +80,11 @@ gulp.task('scss', function () {
       .pipe(sass())
       .pipe(gulp.dest(paths.buildCss))
       .pipe(reload({stream: true}));
+});
+
+gulp.task('vendor-js', function () {
+  gulp.src(paths.vendorJs)
+      .pipe(gulp.dest(paths.buildJs));
 });
 
 gulp.task('browserSync', ['watch'], function() {
