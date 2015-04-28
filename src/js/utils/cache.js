@@ -1,13 +1,12 @@
 module.exports = {
   set(key, val) {
-    console.log('setting:', key);
-    sessionStorage.setItem(key, val);
+    sessionStorage.setItem(key, JSON.stringify(val));
     return val;
   },
 
   get(key) {
-    console.log('getting:', key);
-    return sessionStorage.getItem(key);
+    var item = sessionStorage.getItem(key);
+    return item ? JSON.parse(item) : undefined;
   },
 
   remove(key) {
