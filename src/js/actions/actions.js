@@ -1,5 +1,6 @@
 var Reflux = require('reflux');
 var superagent = require('superagent');
+var cache = require('../utils/cache');
 
 var githubToken = 'inserttokenhere:';
 
@@ -9,25 +10,28 @@ var actions = Reflux.createActions({
   'searchUsers': {asyncResult: true}
 });
 
+function apiRequest(action, endpoint, query) {
+  var key = endpoint + (query ? JSON.stringify(query) : '');
+  var cached = cache.get(key);
+  if (cached)
+    return this.completed(cached);
+
+  return superagent.get('https://api.github.com/' + endpoint)
+                   .set('Authorization', 'Basic ' + btoa(githubToken))
+                   .query(query)
+                   .send()
+                   .end((err, res) => {
+                      if (err) return action.failed(err);
+                      action.completed(cache.set(res.body));
+                   });
+}
+
 actions.getUser.listen( function (username) {
-  superagent.get('https://api.github.com/users/' + username)
-        .set('Authorization', 'Basic ' + btoa(githubToken))
-        .send()
-        .end((err, res) => {
-          if (err) return actions.getUser.failed(err);
-          return actions.getUser.completed(res.body);
-        });
+  apiRequest(this, 'users/' + username);
 });
 
 actions.searchUsers.listen( function (username) {
-  superagent.get('https://api.github.com/search/users')
-            .set('Authorization', 'Basic ' + btoa(githubToken))
-            .query({q: username})
-            .send()
-            .end((err, res) => {
-              if (err) return actions.searchUsers.failed(err);
-              return actions.searchUsers.completed(res.body);
-            });
+  apiRequest(this, 'search/users', {q: username});
 });
 
 module.exports = actions;
