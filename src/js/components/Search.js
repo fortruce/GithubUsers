@@ -22,6 +22,7 @@ var Search = React.createClass({
   },
   render() {
     return (
+      <div>
       <form className='row' onSubmit={this.search}>
         <input  className='col s8 offset-s2 input-field center-align'
                 type='text'
@@ -29,8 +30,9 @@ var Search = React.createClass({
                 value={this.state.search}
                 onChange={this.onChange}
                 ref='username' />
-        <RouteHandler />
       </form>
+      <RouteHandler />
+      </div>
     );
   }
 });
