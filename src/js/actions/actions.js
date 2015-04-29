@@ -33,10 +33,4 @@ actions.searchUsers.listen( function (username) {
   apiRequest(this, 'search/users', {q: username});
 });
 
-actions.searchUsers.completed.listen((results) => {
-  results.items.map((user) => {
-    cache.set('users/' + user.login, user);
-  });
-});
-
 module.exports = actions;
