@@ -4,6 +4,7 @@
   "description": "",
   "dependencies": {
     "babel": "^5.1.13",
+    "babelify": "^6.0.2",
     "browser-sync": "^2.6.5",
     "gulp": "^3.8.11",
     "gulp-browserify": "^0.5.1",
