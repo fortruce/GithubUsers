@@ -20,10 +20,11 @@ var UserSearchResults = React.createClass({
     var users = this.state.users.map((user) => {
       return (
         <Link to='user'
-              className='collection-item'
+              className='collection-item avatar'
               key={user.login}
               params={{username: user.login}}>
-          {user.login}
+          <img src={user.avatar_url} className='circle' />
+          <p>{user.login}</p>
         </Link>);
     });
 
