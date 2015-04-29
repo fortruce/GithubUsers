@@ -19,12 +19,12 @@ var UserSearchResults = React.createClass({
   render() {
     var users = this.state.users.map((user) => {
       return (
-      <li className='collection-item' key={user.login}>
         <Link to='user'
+              className='collection-item'
+              key={user.login}
               params={{username: user.login}}>
           {user.login}
-        </Link>
-      </li>);
+        </Link>);
     });
 
     return (
