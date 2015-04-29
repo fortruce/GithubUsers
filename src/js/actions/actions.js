@@ -44,9 +44,7 @@ actions.searchUsers.listen( function (username) {
 
 actions.dynamicSearch.listen( function (searchEndpoint, search) {
   var endpoint = 'search/' + searchEndpoint;
-  var query = {q: search};
-  var key = cacheKey(endpoint, query);
-  apiRequest(this, endpoint, query, {endpoint: searchEndpoint});
+  apiRequest(this, endpoint, {q: search}, {endpoint: searchEndpoint});
 });
 
 module.exports = actions;
