@@ -2,15 +2,21 @@ var Reflux = require('reflux');
 var superagent = require('superagent');
 var cache = require('../utils/cache');
 var githubToken = require('../utils/apitoken');
+var assign = require('object-assign');
 
 var actions = Reflux.createActions({
   // github actions
   'getUser': {asyncResult: true},
-  'searchUsers': {asyncResult: true}
+  'searchUsers': {asyncResult: true},
+  'dynamicSearch': {asyncResult: true}
 });
 
-function apiRequest(action, endpoint, query) {
-  var key = endpoint + (query ? JSON.stringify(query) : '');
+function cacheKey(endpoint, query) {
+  return endpoint + (query ? JSON.stringify(query) : '');
+}
+
+function apiRequest(action, endpoint, query, merge) {
+  var key = cacheKey(endpoint, query);
   var cached = cache.get(key);
   if (cached)
     return action.completed(cached);
@@ -21,7 +27,10 @@ function apiRequest(action, endpoint, query) {
                    .send()
                    .end((err, res) => {
                       if (err) return action.failed(err);
-                      action.completed(cache.set(key, res.body));
+                      if (merge) {
+                        var merged = assign(res.body, merge)
+                      }
+                      action.completed(cache.set(key, merged || res.body));
                    });
 }
 
@@ -31,6 +40,13 @@ actions.getUser.listen( function (username) {
 
 actions.searchUsers.listen( function (username) {
   apiRequest(this, 'search/users', {q: username});
+});
+
+actions.dynamicSearch.listen( function (searchEndpoint, search) {
+  var endpoint = 'search/' + searchEndpoint;
+  var query = {q: search};
+  var key = cacheKey(endpoint, query);
+  apiRequest(this, endpoint, query, {endpoint: searchEndpoint});
 });
 
 module.exports = actions;
