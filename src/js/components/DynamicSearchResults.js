@@ -11,12 +11,10 @@ var DynamicSearchResults = React.createClass({
   },
   statics: {
     willTransitionTo(t, params) {
-      console.log('dynamicSearch:', params.endpoint, params.search);
       actions.dynamicSearch(params.endpoint, params.search);
     }
   },
   render() {
-    console.log('rendering');
     var results = this.state.items ? this.present() : '';
     return (
       <div>
@@ -30,12 +28,12 @@ var DynamicSearchResults = React.createClass({
     switch(this.state.endpoint) {
       case 'repositories':
         return this.state.items.map((item) => {
-          return (<li><h2>{item.name}</h2><p>{item.full_name}</p></li>);
+          return (<li key={item.id}><h2>{item.name}</h2><p>{item.full_name}</p></li>);
         });
         break;
       case 'users':
         return this.state.items.map((item) => {
-          return (<li><h2>{item.login}</h2></li>);
+          return (<li key={item.id}><h2>{item.login}</h2></li>);
         });
         break;
     }
