@@ -6,7 +6,7 @@ var actions = require('../actions/actions');
 var SearchStore = require('../stores/SearchStore');
 var Reflux = require('reflux');
 
-var Search = React.createClass({  
+var Search = React.createClass({
   mixins: [Reflux.connect(SearchStore, 'search')],
   contextTypes: {
     router: React.PropTypes.func

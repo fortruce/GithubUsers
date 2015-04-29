@@ -11,15 +11,15 @@ var DynamicSearchResults = React.createClass({
   },
   statics: {
     willTransitionTo(t, params) {
-      actions.dynamicSearch(params.endpoint, params.search);
+      actions.dynamicSearch(params.endpoint, params.splat);
     }
   },
   render() {
     var results = this.state.items ? this.present() : '';
     return (
       <div>
-      <h2>{this.context.router.getCurrentParams().search}</h2>
-      {results}
+        <h2>{this.context.router.getCurrentParams().splat}</h2>
+        {results}
       </div>
     );
   },

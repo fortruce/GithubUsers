@@ -44,7 +44,10 @@ actions.searchUsers.listen( function (username) {
 
 actions.dynamicSearch.listen( function (searchEndpoint, search) {
   var endpoint = 'search/' + searchEndpoint;
-  apiRequest(this, endpoint, {q: search}, {endpoint: searchEndpoint});
+  apiRequest(this, endpoint, {q: search}, {
+    endpoint: searchEndpoint,
+    search: search
+  });
 });
 
 module.exports = actions;

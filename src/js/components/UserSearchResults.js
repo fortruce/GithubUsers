@@ -29,10 +29,8 @@ var UserSearchResults = React.createClass({
     });
 
     return (
-      <div className='row'>
-        <div className='col s6 offset-s3'>
-        <ul className='collection'>{users}</ul>
-        </div>
+      <div className='container'>
+        <div className='collection'>{users}</div>
       </div>
     );
   }
