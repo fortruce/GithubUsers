@@ -1,13 +1,8 @@
 var gulp = require('gulp');
 var fs = require('fs');
-var browserify = require('browserify');
-var babelify = require('babelify');
-var rename = require('gulp-rename');
+var browserify = require('gulp-browserify');
 var sass = require('gulp-sass');
 var browserSync = require('browser-sync').create();
-var source = require('vinyl-source-stream');
-var watchify = require('watchify');
-var sourceMaps = require('gulp-sourcemaps');
 var reload = browserSync.reload;
 
 var paths = {
@@ -23,44 +18,22 @@ var paths = {
   scssMain: 'src/scss/main.scss'
 };
 
-
-
 gulp.task('browserify', function() {
-  var watcher = watchify(browserify({
-    entries: [paths.app],
-    transform: [babelify],
-    debug: true,
-    cache: {}, packageCache: {}, fullPaths: true
-  }));
-
-  bundle(watcher);
-
-  return watcher.on('update', function() {
-    bundle(watcher);
-  });
+  gulp.src(paths.app)
+      .pipe(browserify({
+        transform: ['babelify'],
+      }))
+      .pipe(gulp.dest(paths.buildJs));
 });
-
-function bundle(b) {
-  return b.bundle()
-          // catch transform errors and end current pipe w/o crashing
-          .on('error', function(err) {
-            console.log(err.message);
-            console.log('error');
-            this.emit('end');
-          })
-          .pipe(source(paths.app))
-          .pipe(rename(paths.buildApp))
-          .pipe(gulp.dest(paths.buildJs))
-          .on('end', reload);
-}
 
 gulp.task('watch', ['browserify', 'html', 'scss', 'vendor-js'], function () {
   gulp.watch(paths.src, ['browserify']);
-  gulp.watch(paths.html, ['html'])
-      .on('change', reload);
   gulp.watch(paths.scss, ['scss']);
-  gulp.watch(paths.vendorJs, ['vendor-js'])
-      .on('change', reload);
+  gulp.watch(paths.vendorJs, ['vendor-js']);
+  gulp.watch(paths.html, ['html']);
+
+  gulp.watch(paths.buildJs + '**/*.*').on('change', reload);
+  gulp.watch(paths.build + '*.html').on('change', reload);
 });
 
 /**
